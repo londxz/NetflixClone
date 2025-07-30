@@ -14,13 +14,14 @@ class HomeViewController: UIViewController {
     private let homeFeedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
         table.register(CollectionViewTableViewCell.self, forCellReuseIdentifier: CollectionViewTableViewCell.identifier)
+        table.backgroundColor = .black
         return table
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .black
         view.addSubview(homeFeedTable)
         
         homeFeedTable.delegate = self
@@ -57,6 +58,7 @@ class HomeViewController: UIViewController {
         ]
         
         navigationController?.navigationBar.tintColor = .white
+        navigationController?.navigationBar.barTintColor = .black
     }
 }
 
