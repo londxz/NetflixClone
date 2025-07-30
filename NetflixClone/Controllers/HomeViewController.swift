@@ -25,12 +25,36 @@ class HomeViewController: UIViewController {
         homeFeedTable.dataSource = self
         
         homeFeedTable.tableHeaderView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
+        
+        configureNavigationBar()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         homeFeedTable.frame = view.bounds
+    }
+    
+    private func configureNavigationBar() {
+        let image = UIImage(named: "netflixLogo")?.withRenderingMode(.alwaysOriginal)
+        let logoButton = UIButton()
+        logoButton.setImage(image, for: .normal)
+        logoButton.imageView?.contentMode = .scaleAspectFit
+        
+        logoButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            logoButton.widthAnchor.constraint(equalToConstant: 32),
+            logoButton.heightAnchor.constraint(equalTo: logoButton.widthAnchor)
+        ])
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoButton)
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
+            UIBarButtonItem(image: UIImage(systemName: "play.rectangle"), style: .done, target: self, action: nil),
+        ]
+        
+        navigationController?.navigationBar.tintColor = .white
     }
 }
 
@@ -60,5 +84,12 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "header"
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let defaultOffset = view.safeAreaInsets.top
+        let offset = scrollView.contentOffset.y + defaultOffset
+        
+        navigationController?.navigationBar.transform = CGAffineTransform(translationX: 0, y: min(0,-offset))
     }
 }
