@@ -4,7 +4,6 @@
 //
 //  Created by Родион Холодов on 30.07.2025.
 //
-
 import UIKit
 
 class CollectionViewTableViewCell: UITableViewCell {
