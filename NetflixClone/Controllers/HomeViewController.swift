@@ -30,6 +30,8 @@ class HomeViewController: UIViewController {
         homeFeedTable.tableHeaderView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         
         configureNavigationBar()
+        
+        getPopularMovies()
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,6 +61,19 @@ class HomeViewController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .white
         navigationController?.navigationBar.barTintColor = .black
+    }
+    
+    private func getPopularMovies() {
+        DispatchQueue.main.async {
+            APICaller.shared.getPopularMovies { result in
+                switch result {
+                case .success(let movies):
+                    print(movies)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
     }
 }
 
