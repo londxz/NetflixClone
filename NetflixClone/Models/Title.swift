@@ -5,7 +5,11 @@
 //  Created by Родион Холодов on 31.07.2025.
 //
 
-struct Movie: Codable {
+struct TitleResponse: Codable {
+    let results: [Title]
+}
+
+struct Title: Codable {
     let id: Int
     let originalTitle: String
     let title: String

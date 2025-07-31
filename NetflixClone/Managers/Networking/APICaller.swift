@@ -10,7 +10,7 @@ import Foundation
 class APICaller {
     static let shared = APICaller()
     
-    func getPopularMovies(completion: @escaping(Result<[Movie], Error>) -> Void) {
+    func getPopularMovies(completion: @escaping(Result<[Title], Error>) -> Void) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = "api.themoviedb.org"
@@ -28,7 +28,7 @@ class APICaller {
                 }
                 
                 do {
-                    let results = try JSONDecoder().decode(TrendingMovieResponse.self, from: data)
+                    let results = try JSONDecoder().decode(TitleResponse.self, from: data)
                     completion(.success(results.results))
                     return
                 } catch {

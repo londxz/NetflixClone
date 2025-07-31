@@ -9,7 +9,7 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private let sectionTitles = ["Trending movies", "Popular", "Trending tv", "Upcoming movies", "Top rated"]
+    private let sectionTitles = ["Popular", "Trending movies", "Trending tv", "Upcoming movies", "Top rated"]
     
     private let homeFeedTable: UITableView = {
         let table = UITableView(frame: .zero, style: .grouped)
@@ -31,7 +31,7 @@ class HomeViewController: UIViewController {
         
         configureNavigationBar()
         
-        getPopularMovies()
+        fetchData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -63,7 +63,7 @@ class HomeViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = .black
     }
     
-    private func getPopularMovies() {
+    private func fetchData() {
         DispatchQueue.main.async {
             APICaller.shared.getPopularMovies { result in
                 switch result {
