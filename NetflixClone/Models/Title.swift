@@ -17,6 +17,7 @@ struct Title: Codable {
     let voteAverage: Double
     let popularity: Double
     let releaseDate: String
+    let posterPath: String
     
     enum CodingKeys: String, CodingKey {
         case id
@@ -26,5 +27,6 @@ struct Title: Codable {
         case voteAverage = "vote_average"
         case popularity
         case releaseDate = "release_date"
+        case posterPath = "poster_path"
     }
 }
