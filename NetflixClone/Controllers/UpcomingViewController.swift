@@ -13,7 +13,7 @@ class UpcomingViewController: UIViewController {
     
     private let upcomingTable: UITableView = {
         let tableView = UITableView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(TitleTableViewCell.self, forCellReuseIdentifier: TitleTableViewCell.identifier)
         tableView.backgroundColor = .black
         
         return tableView
@@ -63,11 +63,22 @@ extension UpcomingViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = titles[indexPath.row].title
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+//        cell.textLabel?.text = titles[indexPath.row].title
+//        cell.textLabel?.textColor = .white
+//        cell.backgroundColor = .black
+        
+       guard let cell = tableView.dequeueReusableCell(withIdentifier: TitleTableViewCell.identifier, for: indexPath) as? TitleTableViewCell else { return UITableViewCell() }
+        
+        let title = titles[indexPath.row]
+        cell.configure(with: TitleViewModel(title: title.title, posterPath: title.posterPath))
         cell.textLabel?.textColor = .white
         cell.backgroundColor = .black
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        200
     }
 }
