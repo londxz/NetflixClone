@@ -46,6 +46,8 @@ class SearchViewController: UIViewController {
         searchTable.delegate = self
         searchTable.dataSource = self
         
+        searchController.searchResultsUpdater = self
+        
         fetchSearchMovies()
     }
     
@@ -91,5 +93,23 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         200
+    }
+}
+
+extension SearchViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        APICaller.shared.getPopularMovies { results in
+            switch results {
+            case .success(let titles):
+                DispatchQueue.main.async {
+                    resultsController.titles = titles
+                    resultsController.searchResultsCollectionView.reloadData()
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
