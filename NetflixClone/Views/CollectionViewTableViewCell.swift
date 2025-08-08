@@ -6,9 +6,15 @@
 //
 import UIKit
 
+protocol CollectionViewTableViewCellDelegate: AnyObject {
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel)
+}
+
 class CollectionViewTableViewCell: UITableViewCell {
 
     static let identifier = "CollectionViewTableViewCell"
+    
+    weak var delegate: CollectionViewTableViewCellDelegate?
     
     private var titles = [Title]()
     
@@ -61,5 +67,13 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
         cell.configure(with: titles[indexPath.row].posterPath)
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        let title = titles[indexPath.row]
+        let viewModel = TitlePreviewViewModel(title: title.title, description: title.overview)
+        
+        delegate?.collectionViewTableViewCellDidTapCell(self, viewModel: viewModel)
     }
 }

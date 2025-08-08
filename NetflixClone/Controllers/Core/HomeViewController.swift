@@ -38,7 +38,9 @@ class HomeViewController: UIViewController {
         homeFeedTable.tableHeaderView = HeroHeaderView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         
         configureNavigationBar()
-        
+        APICaller.shared.getMovie(with: "harry potter trailer") { result in
+            
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -79,10 +81,13 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         sectionTitles.count
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CollectionViewTableViewCell.identifier, for: indexPath) as? CollectionViewTableViewCell else { return UITableViewCell() }
+        
+        cell.delegate = self
         
         switch indexPath.section {
         case Sections.Popular.rawValue:
@@ -171,5 +176,15 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
         let offset = scrollView.contentOffset.y + defaultOffset
         
         navigationController?.navigationBar.transform = CGAffineTransform(translationX: 0, y: min(0,-offset))
+    }
+}
+
+extension HomeViewController: CollectionViewTableViewCellDelegate {
+    func collectionViewTableViewCellDidTapCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(with: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }

@@ -67,4 +67,39 @@ class APICaller {
             }.resume()
         }
     }
+    
+    func getMovie(with query: String, completion: @escaping(Result<String, Error>) -> Void) {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = "youtube.googleapis.com"
+        urlComponents.path = "/youtube/v3/search"
+        let queryItems = [
+            URLQueryItem(name: "part", value: "snippet"),
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "key", value: NetworkConstants().youtubeApiKey)
+        ]
+        urlComponents.queryItems = queryItems
+        
+        if let url = urlComponents.url {
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            URLSession.shared.dataTask(with: request) { data, _, error in
+                guard let data = data, error == nil else {
+                    completion(.failure(error!))
+                    return
+                }
+                
+                do {
+                    let results = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+                    print(results)
+                    return
+                } catch {
+                    print(error)
+                    completion(.failure(error))
+                    return
+                }
+            }.resume()
+        }
+    }
 }
