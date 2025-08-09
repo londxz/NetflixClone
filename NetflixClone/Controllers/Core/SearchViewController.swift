@@ -94,11 +94,25 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         200
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            guard let title = self?.titles[indexPath.row] else { return }
+            let viewModel = TitlePreviewViewModel(title: title.title, description: title.overview)
+            vc.configure(with: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
 
-extension SearchViewController: UISearchResultsUpdating {
+extension SearchViewController: UISearchResultsUpdating, SearchResultsViewControllerDelegate {
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let resultsController = searchController.searchResultsController as? SearchResultsViewController else { return }
+        
+        resultsController.delegate = self
         
         APICaller.shared.getPopularMovies { results in
             switch results {
@@ -110,6 +124,14 @@ extension SearchViewController: UISearchResultsUpdating {
             case .failure(let error):
                 print(error)
             }
+        }
+    }
+    
+    func searchResultsViewControllerDidTapCell(viewModel: TitlePreviewViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            let vc = TitlePreviewViewController()
+            vc.configure(with: viewModel)
+            self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
 }
