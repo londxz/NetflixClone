@@ -102,4 +102,10 @@ class HeroHeaderView: UIView {
             buttonsStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30),
         ])
     }
+    
+    public func configure(with model: TitleViewModel) {
+        let stringUrl = "https://image.tmdb.org/t/p/w500\(model.posterPath)"
+        guard let url = URL(string: stringUrl) else { return }
+        heroImageView.sd_setImage(with: url)
+    }
 }
